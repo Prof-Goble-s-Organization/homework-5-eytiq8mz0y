@@ -1,0 +1,112 @@
+1. A priority queue is inherently sorted already. One would just push all the entries to it and then pop all
+the values into a new list and that new list will be sorted.
+
+2.a. One can easily implement a heap based on a list - entries store the index of its children and its value,
+as the specific datatype contained by the array is unspecified. Indeed, this would be the preferred approach
+if one knows the size of the input in advance, to avoid heap fragmentation and having to call the allocator
+many times. Subsequent node allocation time would be O(1) as one is inserting without the removal of middle
+elements in between. As such, the runtime is thus similar to 2.b, which will be elaborated on below.
+
+2.b. There will be several operations involved:
+1 - insertion, which will be log(n) as the complexity is affected by the height of the tree.
+2 - removal, also log(n) as the complexity will be the height of the tree.
+As such, the overall runtime will be log(n).
+
+3.a
+digraph  G {
+    "9"->"7"
+    "9"->"8"
+    "7"->"4"
+    "7"->"2"
+    "8"->"5"
+    "8"->"1"
+}
+3.b
+digraph  G {
+    "12"->"9"
+    "12"->"8"
+    "9"->"7"
+    "9"->"4"
+    "4"->"2"
+    "8"->"5"
+    "8"->"1"
+}
+3.c 
+digraph  G {
+    "9"->"7"
+    "9"->"8"
+    "7"->"4"
+    "7"->"2"
+    "8"->"5"
+    "8"->"1"
+}
+3.d
+digraph  G2 {
+    "8"->"7"
+    "8"->"5"
+    "7"->"4"
+    "7"->"2"
+    "5"->"1"
+}
+4. <T extends Number>
+5.a - it does the opposite of what is desired.
+5.c - because the code now reverses the comparison and thus the ordering after sorting.
+
+8.a
+digraph  G {
+    11->6
+    11->19
+    6->4
+    6->9
+    4->5
+    9->8
+    9->10
+    19->17
+    19->43
+    43->31
+    43->49
+}
+
+8.b
+digraph  G {
+    11->6
+    11->19
+    6->4
+    6->9
+    4->5
+    9->8
+    9->10
+    19->17
+    19->43
+    43->31
+    43->49
+    17->18
+}
+
+8.c
+digraph  G {
+    11->6
+    11->19
+    6->5
+    6->9
+    9->8
+    9->10
+    19->17
+    19->43
+    43->31
+    43->49
+    17->18
+}
+8.d
+digraph  G {
+    11->6
+    11->17
+    6->5
+    6->9
+    9->8
+    9->10
+    43->31
+    43->49
+    17->18 // dot will potentially put 18 right, but 18 is intended to be left here
+    17->43
+}

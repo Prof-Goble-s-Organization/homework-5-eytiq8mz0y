@@ -1,5 +1,7 @@
 package hw5;
 
+import java.util.NoSuchElementException;
+
 /**
  * Linked implementation of a binary search tree. The binary search tree
  * inherits the methods from the binary tree. The add and remove methods must
@@ -100,16 +102,38 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	 * {@inheritDoc}
 	 */
 	public V get(K key) {
-		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		BTNode<K, V> cur = root;
+
+		while (true) {
+			if (cur == null) {
+				return null;
+			} else if (cur.key == key) {
+				return cur.value;
+			} else if (key.compareTo(cur.key) < 0) {
+				cur = cur.left;
+			} else {
+				cur = cur.right;
+			}
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void set(K key, V value) {
-		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		BTNode<K, V> cur = root;
+		while (true) {
+			if (cur == null) {
+				throw new NoSuchElementException();
+			} else if (cur.key == key) {
+				cur.value = value;
+				return;
+			} else if (key.compareTo(cur.key) < 0) {
+				cur = cur.left;
+			} else {
+				cur = cur.right;
+			}
+		}
 	}
 
 	/**
@@ -170,8 +194,37 @@ public class COMP232LinkedBinarySearchTree<K extends Comparable<K>, V> extends C
 	 * {@inheritDoc}
 	 */
 	public V remove(K key) {
-		// Intentionally not implemented - see homework assignment.
-		throw new UnsupportedOperationException("Not yet implemented");
+		BTNode<K, V> cur = root;
+		while (true) {
+			if (cur == null) {
+				return null;
+			} else if (cur.key == key) {
+				if (cur.parent.left == cur) {
+					cur.parent.left = null;
+				} else if (cur.parent.right == cur) {
+					cur.parent.right = null;
+				}
+
+				//"If the node has one or more descendants, its rightmost leaf takes its place in the tree"
+				boolean has_right = false;
+				if (cur.right != null) {
+					has_right = true;
+					addNodeToSubTree(cur.parent, cur.right);
+				}
+				if (cur.left != null) {
+					if (!has_right) {
+						addNodeToSubTree(cur.parent, cur.left);
+					} else {
+						addNodeToSubTree(root, cur.left);
+					}
+				}
+				return cur.value;
+			} else if (key.compareTo(cur.key) < 0) {
+				cur = cur.left;
+			} else {
+				cur = cur.right;
+			}
+		}
 	}
 
 	/*
