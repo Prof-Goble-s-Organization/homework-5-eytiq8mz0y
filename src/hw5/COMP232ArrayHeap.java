@@ -91,7 +91,23 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
          * node up the tree.
 	 * I recommend creating a helper function to assist with the percolation.
          */
-        throw new UnsupportedOperationException("Not yet implemented");
+
+         
+        int last = tree.size();
+        tree.insert(last, new HeapNode<K, V>(key, value));
+
+        while (true) {
+            if (last == 0) {
+                break;
+            }
+            int parent_idx = getParentIndex(last);
+            if (tree.get(parent_idx).key.compareTo(tree.get(last).key) > 0) {
+                swap(parent_idx, last);
+                last = parent_idx;
+            } else {
+                break;
+            }
+        }
     }
 
     /**
@@ -206,16 +222,33 @@ public class COMP232ArrayHeap<K extends Comparable<K>, V> implements COMP232Prio
      */
     public void adjustPriority(V value, K newKey) {
         // Intentionally not implemented -- see homework assignment
-        throw new UnsupportedOperationException("Not yet implemented.");
 
-        /*
-         * Find the node with the value -- Hint: Just search through the array!
-         * Replace its key and then move the node to a valid location within the
-         * tree. Hint: If you factor out your percolate functionality from the 
-         * add method in a way similar to how the trickleDown method was factored 
-         * out of remove, then you can use those two methods to move the node to
-         * a proper location.
-         */
+        int last = tree.size();
+        for (int i = 0; i < tree.size(); i++) {
+            if (tree.get(i).value == value) {
+                last = i;
+                break;
+            }
+        }
+        if (last == 0) {
+            throw new IllegalStateException();
+        }
+        if (last == tree.size()) {
+            return;
+        }
+        while (true) {
+            if (last == 0) {
+                break;
+            }
+            int parent_idx = getParentIndex(last);
+            if (tree.get(parent_idx).key.compareTo(tree.get(last).key) > 0) {
+                swap(parent_idx, last);
+                last = parent_idx;
+            } else {
+                break;
+            }
+        }
+        trickleDown(last);
     }
 
     /**
